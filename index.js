@@ -140,14 +140,14 @@ app.get('/transfer', (req, res) => {
     if(senderdata==null){
       return res.status(200).json({"error":"Your account does not exist?"})
     }else{
-      var senderaccount = JSON.parse(senderdata)
-      bcrypt.compare(password, senderaccount.password, function(err0, result) {
+      var acc = JSON.parse(senderdata)
+      bcrypt.compare(password, acc.password, function(err0, result) {
         if(err0!=null){
           console.log(err0)
           return res.status(200).json({"error":"Internal error occured"})
         }
         if(result==true){
-          var newAmt = parseNum(senderaccount.balance)-sendAmt
+          var newAmt = parseNum(acc.balance)-sendAmt
       
           if(!(newAmt>0)){
             return res.status(200).json({"error":"You cannot afford to send that much"})
