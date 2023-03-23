@@ -1,0 +1,114 @@
+<html>
+<head>
+  <title>AshBucks Login</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-color: black;
+      color:white;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+    a {
+      font-size: 30px;
+      text-decoration: none;
+      background-color: white;
+      color: black;
+      font-family: 'IBM Plex Mono', monospace;
+      padding: 5px;
+      margin: 10px;
+    }
+    #logout {
+      font-size: 30px;
+      text-decoration: none;
+      background-color: white;
+      color: black;
+      padding: 5px;
+      margin: 10px;
+      
+    }
+    button {
+      font-size: 30px;
+      text-decoration: none;
+      background-color: white;
+      color: black;
+      padding: 5px;
+      margin: 10px;
+    }
+
+    input {
+      font-size: 30px;
+      text-decoration: none;
+      border: 4px solid white;
+      background-color: white;
+      color: black;
+      padding: 5px;
+      margin: 10px;
+      outline: none;
+      border-radius:25px;
+    }
+    .section {
+      border-bottom: 1px solid white;
+      margin-bottom: 0px;
+      padding: 15px;
+    }
+  </style>
+</head>
+<body>
+  <center>
+    <button onclick="window.open('../', '_self')">Back</button><p>
+    <input id="username" type="text" placeholder="Enter username"><p>
+    <input id="password" type="password" placeholder="Enter password"><p>
+    <button onclick="create()">Log in</button><p>
+    <span id="status"></span>
+  </center>
+
+  <script>
+
+    var input = document.getElementById("password");
+    var input2 = document.getElementById("username");
+    // Execute a function when the user presses a key on the keyboard
+    input2.addEventListener("keypress", function(event) {
+      // If the user presses the "Enter" key on the keyboard
+      if (event.key === "Enter") {
+        // Cancel the default action, if needed
+        event.preventDefault();
+        // Trigger the button element with a click
+        create()
+      }
+    });
+    input.addEventListener("keypress", function(event) {
+      // If the user presses the "Enter" key on the keyboard
+      if (event.key === "Enter") {
+        // Cancel the default action, if needed
+        event.preventDefault();
+        // Trigger the button element with a click
+        create()
+      }
+    });
+    
+    function create(){
+      document.getElementById("status").innerHTML="Loading..."
+      const username = document.getElementById("username").value
+      const password = document.getElementById("password").value
+
+      fetch(`https://AshBucks.authorises.repl.co/userinfo?username=${username}&password=${password}`)
+        .then((response) => response.json())
+        .then((data) => {
+          if(data.hasOwnProperty("success")){
+            document.getElementById("status").innerHTML="Logged in successfully..."
+            window.localStorage.setItem("username", username)
+            window.localStorage.setItem("password", password)
+            window.open("https://AshBucks.authorises.repl.co", "_self")
+          }else{
+            document.getElementById("status").innerHTML=data.error
+            window.localStorage.removeItem("username")
+            window.localStorage.removeItem("password")
+          }
+        });
+    }
+  </script>
+
+</body>
+</html>
