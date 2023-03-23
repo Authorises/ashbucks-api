@@ -252,6 +252,10 @@ app.get('/makeaccount', (req, res) => {
 
 })
 
+app.get('/health', (req, res) => {
+    return res.status(200).json({"working":1})
+})
+
 app.get('/userinfo', (req, res) => {
     
   if (!(req.query.hasOwnProperty("username"))){
