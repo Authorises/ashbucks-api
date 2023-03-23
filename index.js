@@ -252,7 +252,7 @@ app.get('/makeaccount', (req, res) => {
 })
 
 app.get('/health', (req, res) => {
-    return res.status(200).json({"working":1})
+    res.status(200)
 })
 
 app.get('/userinfo', (req, res) => {
