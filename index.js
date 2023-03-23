@@ -252,8 +252,8 @@ app.get('/makeaccount', (req, res) => {
 })
 
 app.get('/health', (req, res) => {
-    res.status(200)
-})
+    res.status(200);
+});
 
 app.get('/userinfo', (req, res) => {
     
