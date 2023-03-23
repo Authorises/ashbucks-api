@@ -98,7 +98,7 @@ app.get('/redeem', (req,res) => {
       })
     }
   })
-})
+});
 
 app.get('/transfer', (req, res) => {
   if (!(req.query.hasOwnProperty("username"))){
@@ -203,7 +203,7 @@ app.get('/transfer', (req, res) => {
     }
   })
   
-})
+});
 
 app.get('/makeaccount', (req, res) => {
   
@@ -249,10 +249,10 @@ app.get('/makeaccount', (req, res) => {
     }
   })
 
-})
+});
 
 app.get('/health', (req, res) => {
-    res.status(200);
+  res.status(200).json({"working":true});
 });
 
 app.get('/userinfo', (req, res) => {
@@ -292,7 +292,7 @@ app.get('/userinfo', (req, res) => {
     }
   })
   
-})
+});
 
 (function payout() {
     var payoutAmount = parseNum(0.05/sockets.size)
