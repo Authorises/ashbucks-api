@@ -101,7 +101,6 @@ app.get('/redeem', (req,res) => {
 })
 
 app.get('/transfer', (req, res) => {
-  return res.status(200).json({"error":"Transactions are currently disabled"})
   if (!(req.query.hasOwnProperty("username"))){
     return res.status(200).json({"error":"You are not logged in"})
   }
