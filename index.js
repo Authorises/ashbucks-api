@@ -32,7 +32,7 @@ function onlyLettersAndNumbers(str) {
 }
 
 function parseNum(num){
-  return Math.floor(num*1000)/1000
+  return num.toFixed(3)
 }
 
 function makeid(length) {
