@@ -32,7 +32,7 @@ function onlyLettersAndNumbers(str) {
 }
 
 function parseNum(num){
-  return Number.parseFloat(num).toFixed(3)
+  return Math.round(Number(num) * 1000) / 1000
 }
 
 function makeid(length) {
@@ -160,7 +160,7 @@ app.get('/transfer', (req, res) => {
             }
             if(data2!=null){
               var sendToAcc = JSON.parse(data2)
-              sendToAcc.balance=parseNum(sendToAcc.balance)+sendAmt
+              sendToAcc.balance=parseNum(parseNum(sendToAcc.balance)+sendAmt)
               if(!(sendToAcc.hasOwnProperty("transactions"))){
                 sendToAcc["transactions"] = []
               }
