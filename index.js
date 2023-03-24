@@ -32,7 +32,7 @@ function onlyLettersAndNumbers(str) {
 }
 
 function parseNum(num){
-  return parseFloat(num).toFixed(3)
+  return Number.parseFloat(num).toFixed(3)
 }
 
 function makeid(length) {
