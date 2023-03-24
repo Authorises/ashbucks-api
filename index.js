@@ -19,6 +19,22 @@ const client = redis.createClient({
         port: 11609
     }
 });
+const logdna = require('@logdna/logger')
+
+const options = {
+  app: 'api'
+, level: 'debug' // set a default for when level is not provided in function calls
+}
+
+const logger = logdna.createLogger(process.env.MEZMO_PASSWORD, options)
+
+
+const Moptions = {
+  app: 'mining'
+, level: 'debug' // set a default for when level is not provided in function calls
+}
+
+const miningLogger = logdna.createLogger(process.env.MEZMO_PASSWORD, Moptions)
 
 const miningDifficulty = 999999
 
@@ -85,7 +101,8 @@ app.get('/redeem', (req,res) => {
                 return res.status(200).json({"error":"Internal error occured"})
               }
               client.set(`account.${username}`, JSON.stringify(acc), function(err3, data3){
-                
+                var ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress 
+                logger.log(`Code ${req.query.code} redeemed by ${acc.username} for ${amt} at ${ip}`)
                 return res.status(200).json({"success":"Code redeemed"})
               })
             })
@@ -183,6 +200,8 @@ app.get('/transfer', (req, res) => {
                       console.log(err4)
                       return res.status(200).json({"error":"Internal error occured"})
                     }else{
+                      var ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress 
+                      logger.log(`Transfer from ${acc.username} to ${sendToAcc.username} for ${sendAmt} at ${ip}`)
                       return res.status(200).json({"success":"transfer complete"})
                     }
                   })
@@ -238,7 +257,8 @@ app.get('/makeaccount', (req, res) => {
           balance:0
         }
         client.set(`account.${username}`, JSON.stringify(acc), function(err2, data2){
-        
+            var ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress 
+            logger.log(`Account made ${acc.username} from ${ip}`)
             return res.status(200).json({"success":req.query.username})
         
         })
@@ -255,8 +275,7 @@ app.get('/health', (req, res) => {
   res.status(200).json({"working":true});
 });
 
-app.get('/userinfo', (req, res) => {
-    
+app.get('/userinfo', (req, res) => {    
   if (!(req.query.hasOwnProperty("username"))){
     return res.status(200).json({"error":"Please enter a username"})
   }
@@ -281,6 +300,8 @@ app.get('/userinfo', (req, res) => {
           if(acc.username!=username){
             return res.status(200).json({"error":"Serious error occured ..."})
           }else{
+            var ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress 
+            logger.log(`Send userinfo to ${acc.username} to ${ip}`)
             return res.status(200).json({"success":"account exists","account":acc})
           }
             
@@ -311,6 +332,7 @@ app.get('/userinfo', (req, res) => {
                 if(err3!=null){
                   socket.emit("statusbad", "Error occured whilst mining. Log out and try to log back in.")
                 }else{
+                  miningLogger.log(`Awarded ${data.username} with ${amt}`)
                   socket.emit("gained", amt)
                   socket.emit("miners", sockets.size)
                 }
