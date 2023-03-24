@@ -147,9 +147,9 @@ app.get('/transfer', (req, res) => {
           return res.status(200).json({"error":"Internal error occured"})
         }
         if(result==true){
-          var newAmt = parseNum(acc.balance)-sendAmt
+          var newAmt = parseNum(parseNum(acc.balance)-sendAmt)
       
-          if(!(newAmt>0)){
+          if(!(newAmt>=0)){
             return res.status(200).json({"error":"You cannot afford to send that much"})
           }
       
@@ -357,6 +357,6 @@ http.listen(10000, () => {
 });
 
 client.connect()
-    .then(() => {
-      console.log("Redis connected")
-    })
+  .then(() => {
+    console.log("Redis connected")
+  })
